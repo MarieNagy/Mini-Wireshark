@@ -1,0 +1,4 @@
+def packetClickedFunction(pktNum):
+	S1=pktsList[pktNum].sprintf("Ethernet , Src:%Ethernet.src%, Dst:%Ethernet.dst%, type:%Ethernet.type%")
+	S2=pktsList[pktNum].sprintf("Internet Protocol Version {IP:4, Src:%IP.src%, Dst:%IP.dst% }{IPv6:6, Src:%IPv6.src%, Dst:%IPv6.dst%}")
+	S3=pktsList[pktNum].sprintf("{UDP:User Datagram Protocol, Src Port:%UDP.sport%, Dst Port:%UDP.dport%, len:%UDP.len%, chksum:%UDP.chksum%}{TCP:Transmission Control Protocol, Src Port:%TCP.sport%, Dst Port:%TCP.dport%, seq:%TCP.seq%, ack:%TCP.ack%, win:%TCP.window%, chksum:%TCP.chksum%}") 
