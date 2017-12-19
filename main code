@@ -12,4 +12,7 @@ def Stop(x):
     else:
         return False
   
-sniff(iface=S1,count=0,timeout=None,stop_filter=Stop)///////iface=S1 OR S2 depending on the user's choice
+
+p=sniff(iface=S1,count=0,timeout=None,stop_filter=Stop,prn=lambda x:x.sprintf("%.time%    {ARP:%-15s,ARP.psrc%          }{IP:%-15s,IP.src%          }{IPv6:%-15s,IPv6.src%}          {ARP:%-15s,ARP.pdst%          }{IP:%-15s,IP.dst%          }{IPv6:%-15s,IPv6.dst%          }     {TCP:TCP}{UDP:UDP}{ICMP:ICMP}     {ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}  "),store=1)
+///////iface=S1 OR S2 depending on the user's choice
+///////it display creation time, source IP, destination IP, protocol, packet length
