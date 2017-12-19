@@ -4,7 +4,7 @@ from scapy.all import *
 Interfaces=get_windows_if_list()
 S1=Interfaces[0]['name']
 S2=Interfaces[1]['name']
-stopFlag=False
+stopFlag=False  /////// this variable should be changed to True when stop button is pressed
 
 def Stop(x):
     if stopFlag==True:
@@ -12,4 +12,4 @@ def Stop(x):
     else:
         return False
   
-sniff(iface=S1,count=0,timeout=None,stop_filter=Stop)
+sniff(iface=S1,count=0,timeout=None,stop_filter=Stop)///////iface=S1 OR S2 depending on the user's choice
