@@ -1,0 +1,15 @@
+from scapy.all import *
+
+
+Interfaces=get_windows_if_list()
+S1=Interfaces[0]['name']
+S2=Interfaces[1]['name']
+stopFlag=False
+
+def Stop(x):
+    if stopFlag==True:
+        return True
+    else:
+        return False
+  
+sniff(iface=S1,count=0,timeout=None,stop_filter=Stop)
