@@ -7,12 +7,24 @@
 # WARNING! All changes made in this file will be lost!
 
 from scapy.all import *
-from PyQt5 import QtGui
+from PyQt5 import *
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QMessageBox
 
 sniff(prn=lambda x: x.summary(),lfilter=None,count=5,offline=None,store=0,L2socket=None,timeout=None)
 
+list = get_windows_if_list()
+
+s1 = list[0]['name']
+s2 = list[1]['name']
+stopFlag = False
+
+
+def Stop(x):
+    if stopFlag == True:
+        return True
+    else:
+        return False
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -49,6 +61,7 @@ class Ui_MainWindow(object):
         self.pushButtonStart.setChecked(False)
         self.pushButtonStart.setAutoRepeat(True)
         self.pushButtonStart.setObjectName("pushButtonStart")
+        self.pushButtonStart.clicked.connect(self.DoStart )
         self.horizontalLayout.addWidget(self.pushButtonStart)
         self.pushButtonStop = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -63,6 +76,7 @@ class Ui_MainWindow(object):
         self.pushButtonStop.setIconSize(QtCore.QSize(60, 60))
         self.pushButtonStop.setAutoRepeat(True)
         self.pushButtonStop.setObjectName("pushButtonStop")
+        self.pushButtonStop.clicked.connect(self.DoStop)
         self.horizontalLayout.addWidget(self.pushButtonStop)
         self.pushButtonRestart = QtWidgets.QPushButton(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -121,9 +135,6 @@ class Ui_MainWindow(object):
         self.comboBoxCapture.setObjectName("comboBoxCapture")
         self.comboBoxCapture.addItem("")
         self.comboBoxCapture.addItem("")
-        self.comboBoxCapture.addItem("")
-        self.comboBoxCapture.addItem("")
-        self.comboBoxCapture.addItem("")
         self.horizontalLayout_3.addWidget(self.comboBoxCapture)
         self.verticalLayout_4.addLayout(self.horizontalLayout_3)
         self.horizontalLayout.addLayout(self.verticalLayout_4)
@@ -177,8 +188,6 @@ class Ui_MainWindow(object):
         self.actionSave.setObjectName("actionSave")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
-        self.actionExit_2 = QtWidgets.QAction(MainWindow)
-        self.actionExit_2.setObjectName("actionExit_2")
         self.actionStart = QtWidgets.QAction(MainWindow)
         self.actionStart.setObjectName("actionStart")
         self.actionStop = QtWidgets.QAction(MainWindow)
@@ -190,7 +199,7 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionExit_2)
+        self.menuFile.addAction(self.actionExit)
         self.menuEdit.addAction(self.actionRefresh)
         self.menuCapture.addAction(self.actionStart)
         self.menuCapture.addAction(self.actionStop)
@@ -208,24 +217,29 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "   Filter   "))
         self.comboBoxFilter.setItemText(0, _translate("MainWindow", "TCP"))
         self.comboBoxFilter.setItemText(1, _translate("MainWindow", "HTTP"))
+        self.comboBoxFilter.activated[str].connect(self.filter_choice)
         self.label.setText(_translate("MainWindow", " Capture"))
-        self.comboBoxCapture.setItemText(0, _translate("MainWindow", "Ethernet"))
-        self.comboBoxCapture.setItemText(1, _translate("MainWindow", "Wi-Fi"))
-        self.comboBoxCapture.setItemText(2, _translate("MainWindow", "Ethernet 2"))
-        self.comboBoxCapture.setItemText(3, _translate("MainWindow", "Ethernet 3"))
-        self.comboBoxCapture.setItemText(4, _translate("MainWindow", "Ethernet 4"))
+        self.comboBoxCapture.setItemText(0, _translate("MainWindow", s1 ))
+        self.comboBoxCapture.setItemText(1, _translate("MainWindow", s2 ))
+        self.comboBoxCapture.activated.connect(self.capture_choice)
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Time"))
+
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Source"))
+
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Destination"))
+
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Protocol"))
+
         item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Length"))
+
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Info"))
+
         self.treeView.setWhatsThis(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
@@ -233,12 +247,45 @@ class Ui_MainWindow(object):
         self.actionOpen.setText(_translate("MainWindow", "Open"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        self.actionExit_2.setText(_translate("MainWindow", "Exit"))
+        self.pushButtonRestart.clicked.connect(self.message)
+        self.actionExit.triggered.connect(self.close_application)
         self.actionStart.setText(_translate("MainWindow", "Start Captue"))
         self.actionStop.setText(_translate("MainWindow", "Stop Captue"))
         self.actionRestart.setText(_translate("MainWindow", "Restart Captue"))
         self.actionRefresh.setText(_translate("MainWindow", "Refresh"))
 
+
+    def close_application(self):
+        sys.exit()
+
+    def capture_choice(self):
+        print ( "selection changed " + self.comboBoxCapture.currentText())
+        if (self.comboBoxCapture.currentText() == s1 ):
+            global s
+            s = s1
+            print("Ethernet")
+        elif (self.comboBoxCapture.currentText() == s2 ):
+            s = s2
+            print("Wi-Fi")
+
+
+    def filter_choice(self):
+        print("selection changed " + self.comboBoxFilter.currentText())
+
+
+    def message(self):
+        print("w b3deen ?")
+
+    def DoStop(self):
+        stopFlag = True
+
+    def DoStart(self):
+        print("Hello")
+        p = sniff(iface= s, count=0, timeout=None, stop_filter=Stop, prn=lambda x: x.sprintf(
+            "%.time%    {ARP:%-15s,ARP.psrc%          }{IP:%-15s,IP.src%          }{IPv6:%-15s,IPv6.src%}          {ARP:%-15s,ARP.pdst%          }{IP:%-15s,IP.dst%          }{IPv6:%-15s,IPv6.dst%          }     {TCP:TCP}{UDP:UDP}{ICMP:ICMP}     {ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}  "),
+                  store=1)
+
+        print(":D")
 
 if __name__ == "__main__":
     import sys
