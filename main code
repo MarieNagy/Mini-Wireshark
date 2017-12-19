@@ -13,4 +13,4 @@ def Stop(x):
         return False
   
 
-p=sniff(iface=S1,count=0,timeout=None,stop_filter=Stop,prn=lambda x:x.sprintf("%.time%    {ARP:%-15s,ARP.psrc%          }{IP:%-15s,IP.src%          }{IPv6:%-15s,IPv6.src%}          {ARP:%-15s,ARP.pdst%          }{IP:%-15s,IP.dst%          }{IPv6:%-15s,IPv6.dst%          }     {TCP:TCP}{UDP:UDP}{ICMP:ICMP}     {ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}  "),store=1)
+p=sniff(iface=S2,count=0,timeout=20,stop_filter=Stop,prn=lambda x:x.sprintf("%.time%    {ARP:%-15s,ARP.psrc%          }{IP:%-15s,IP.src%          }{IPv6:%-15s,IPv6.src%}          {ARP:%-15s,ARP.pdst%          }{IP:%-15s,IP.dst%          }{IPv6:%-15s,IPv6.dst%          }     {TCP:TCP}{UDP:UDP}{ICMP:ICMP}     {ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}  "),store=1)
