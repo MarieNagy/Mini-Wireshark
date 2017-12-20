@@ -1,0 +1,7 @@
+def filterDisplay(p):
+  	filteredList=[]
+	  for p in pktsList:
+		    if p.haslayer(p):
+            filteredList.append(p)
+////////////////////// p is the filtering protocol
+//////////////filteredList should be displayed in the table 
