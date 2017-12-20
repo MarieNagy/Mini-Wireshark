@@ -1,0 +1,17 @@
+def filterDisplay(p):
+  	filteredList=[]
+	for p in pktsList:
+        	if p.haslayer(p):
+        		filteredList.append(p)
+			
+	for p in filteredList:
+    		Time=p[0].sprintf("%.time%")
+    		SourceIP=p[0].sprintf("{ARP:%-15s,ARP.psrc%}{IP:%-15s,IP.src%}{IPv6:%-15s,IPv6.src%}")
+    		DstIP=p[0].sprintf("{ARP:%-15s,ARP.pdst%}{IP:%-15s,IP.dst%}{IPv6:%-15s,IPv6.dst%}")
+    		protocol=p[0].sprintf("{TCP:TCP}{UDP:UDP}{ICMP:ICMP}")
+    		length=p[0].sprintf("{ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}")
+    		Info=p[0].sprintf("{UDP:%UDP.sport%  ->  %UDP.dport% , chksum=%UDP.chksum%} {TCP:%TCP.sport%  ->  %TCP.dport% , seq=%TCP.seq% , ack=%TCP.ack% , win=%TCP.window%}")
+  		////////////////these values should be assigned to the table each for-loop iteration//////////////////////
+	    
+	 
+//////////////// p is the filtering protocol///////////////
