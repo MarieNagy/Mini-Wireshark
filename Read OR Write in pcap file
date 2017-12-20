@@ -1,0 +1,42 @@
+/////////////////////////////TO SAVE PACKETS LIST in pcap File////////////////////////////////////////////
+import PyQt5
+from PyQt5 import QtWidgets
+
+app = QtWidgets.QApplication([])
+error_dialog = QtWidgets.QErrorMessage()
+
+try:
+    wrpcap("filename",pktsList)
+except:
+    error_dialog.showMessage('File Name not specified Or File Name Already Exists')
+    app.exec_()
+
+
+
+
+///////////////////////////TO LOAD PCAP  FILE//////////////////////////////////////////
+///first request the file name from the user
+import PyQt5
+from PyQt5 import QtWidgets
+
+app = QtWidgets.QApplication([])
+error_dialog = QtWidgets.QErrorMessage()
+
+errorFlag=false
+newpktsList=[]
+try:
+    newpktsList=rdpcap("filename")   
+except:
+    error_dialog.showMessage('File Does not Exist')
+    app.exec_()
+    errorFlag=True
+
+if errorFlag==False:
+    for p in newpktsList:
+        Time=p.sprintf("%.time%")
+        SourceIP=p.sprintf("{ARP:%-15s,ARP.psrc%}{IP:%-15s,IP.src%}{IPv6:%-15s,IPv6.src%}")
+        DstIP=p.sprintf("{ARP:%-15s,ARP.pdst%}{IP:%-15s,IP.dst%}{IPv6:%-15s,IPv6.dst%}")
+        protocol=p.sprintf("{TCP:TCP}{UDP:UDP}{ICMP:ICMP}")
+        length=p.sprintf("{ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}")
+        Info=p.sprintf("{UDP:%UDP.sport%  ->  %UDP.dport% , chksum=%UDP.chksum%} {TCP:%TCP.sport%  ->  %TCP.dport% , seq=%TCP.seq% , ack=%TCP.ack% , win=%TCP.window%}")
+        //////////Then Assign these values in the table cells in each iteration////
