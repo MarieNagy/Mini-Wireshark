@@ -14,5 +14,5 @@ def filterDisplay(p):
   		////////////////these values should be assigned to the table each for-loop iteration//////////////////////
 	    
 	 
-////////////////////// p is the filtering protocol
-//////////////filteredList should be displayed in the table 
+//////////////// p is the filtering protocol///////////////
+
