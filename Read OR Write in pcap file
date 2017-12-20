@@ -1,21 +1,42 @@
-////To save list of packets in pcap file////
-first request the file name from the user 
-then call this function >>>>>>>  wrpcap("filename",pktsList)
+/////////////////////////////TO SAVE PACKETS LIST in pcap File////////////////////////////////////////////
+import PyQt5
+from PyQt5 import QtWidgets
+
+app = QtWidgets.QApplication([])
+error_dialog = QtWidgets.QErrorMessage()
+
+try:
+    wrpcap("filename",pktsList)
+except:
+    error_dialog.showMessage('File Name not specified Or File Name Already Exists')
+    app.exec_()
 
 
-/////To load pcap file////
-first request the file name from the user
-then call this function >>>>>>> newpktsList=rdpcap("filename")   
-NOTE:this function will throw exception if the filename does not exist, so apply exception handling for this function
 
 
-///////to display the loaded packets in the table
+///////////////////////////TO LOAD PCAP  FILE//////////////////////////////////////////
+///first request the file name from the user
+import PyQt5
+from PyQt5 import QtWidgets
 
-for p in newpktsList:
-    Time=p.sprintf("%.time%")
-    SourceIP=p.sprintf("{ARP:%-15s,ARP.psrc%}{IP:%-15s,IP.src%}{IPv6:%-15s,IPv6.src%}")
-    DstIP=p.sprintf("{ARP:%-15s,ARP.pdst%}{IP:%-15s,IP.dst%}{IPv6:%-15s,IPv6.dst%}")
-    protocol=p.sprintf("{TCP:TCP}{UDP:UDP}{ICMP:ICMP}")
-    length=p.sprintf("{ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}")
-    Info=p.sprintf("{UDP:%UDP.sport%  ->  %UDP.dport% , chksum=%UDP.chksum%} {TCP:%TCP.sport%  ->  %TCP.dport% , seq=%TCP.seq% , ack=%TCP.ack% , win=%TCP.window%}")
-    //////////Then Assign these values in the table cells in each iteration////
+app = QtWidgets.QApplication([])
+error_dialog = QtWidgets.QErrorMessage()
+
+errorFlag=false
+newpktsList=[]
+try:
+    newpktsList=rdpcap("filename")   
+except:
+    error_dialog.showMessage('File Does not Exist')
+    app.exec_()
+    errorFlag=True
+
+if errorFlag==False:
+    for p in newpktsList:
+        Time=p.sprintf("%.time%")
+        SourceIP=p.sprintf("{ARP:%-15s,ARP.psrc%}{IP:%-15s,IP.src%}{IPv6:%-15s,IPv6.src%}")
+        DstIP=p.sprintf("{ARP:%-15s,ARP.pdst%}{IP:%-15s,IP.dst%}{IPv6:%-15s,IPv6.dst%}")
+        protocol=p.sprintf("{TCP:TCP}{UDP:UDP}{ICMP:ICMP}")
+        length=p.sprintf("{ARP:%ARP.plen%}{IP:%IP.len%}{IPv6:%IPv6.plen%}")
+        Info=p.sprintf("{UDP:%UDP.sport%  ->  %UDP.dport% , chksum=%UDP.chksum%} {TCP:%TCP.sport%  ->  %TCP.dport% , seq=%TCP.seq% , ack=%TCP.ack% , win=%TCP.window%}")
+        //////////Then Assign these values in the table cells in each iteration////
